@@ -1,0 +1,52 @@
+
+<div class='container'>
+  <form [formGroup]="creditCardForm" (ngSubmit)="makePayment()">
+
+    <div class='card m-5 shadow'>
+      <div class='card-header text-center'>
+        <h3>Credit Card Payment</h3>
+      </div>
+
+      <div class='card-body'>
+        <div class='row'>
+          <div class='col-md-12 mb-2'>
+            <label class='font-weight-bold'>Credit Card Number<span class="text-danger" *ngIf="hasRequiredField(creditCardForm.get('card_no'))">*</span></label>
+            <input  formControlName='card_no' class='form-control' type='text' />
+          </div>
+
+          <div class='col-md-12 mb-2'>
+            <label class='font-weight-bold'>Card Holder<span class="text-danger" *ngIf="hasRequiredField(creditCardForm.get('card_holder'))">*</span></label>
+            <input formControlName='card_holder' class='form-control' type='text' />
+          </div>
+
+          <div class='col-md-12 mb-2'>
+            <label class='font-weight-bold'>Expiration Date<span class="text-danger" *ngIf="hasRequiredField(creditCardForm.get('expiry_date'))">*</span></label>
+            <input formControlName='expiry_date' class='form-control' min='{{today}}' type='date' />
+          </div>
+
+          <div class='col-md-12 mb-2'>
+            <label class='font-weight-bold'>Security Code (CVV)<span class="text-danger" *ngIf="hasRequiredField(creditCardForm.get('security_code'))">*</span></label>
+            <input formControlName='security_code'  class='form-control' type='text' />
+          </div>
+
+          <div class='col-md-12'>
+            <label class='font-weight-bold'>Amount<span class="text-danger" *ngIf="hasRequiredField(creditCardForm.get('amount'))">*</span></label>
+            <input formControlName='amount' class='form-control' type='number'/>
+          </div>
+        </div>
+      </div>
+
+      <div class='card-footer'>
+        <div class='btn-group float-right'>
+          <button class='btn btn-secondary' type='button' (click)="goBack()">
+            Back
+          </button>
+          <button [disabled]="creditCardForm.invalid || loaders?.processing" [ngClass]="setValidationClass(creditCardForm.valid)" type='submit'>
+            {{btnText.pay}}
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </form>
+</div>
