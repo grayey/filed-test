@@ -27,6 +27,7 @@ export class NotificationComponent implements OnInit {
         this.alertClosure = setTimeout(() => {
             this.alert['visible'] = false;
         }, 3000);
+        // console.log('xx')
     }
 
     ngOnInit() {
