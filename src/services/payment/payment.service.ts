@@ -17,7 +17,7 @@ export class PaymentService{
    * This method makes a credit card payment
    */
   public makePayment =  (paymentData:CreditCard): Observable<any> => {
-    const url = 'credit-card-payment';
+    const url = 'credit-card-pay';
     return  this.apiHandler.post(url, paymentData);
   }
 

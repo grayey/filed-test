@@ -4,7 +4,7 @@
 
     <div class='card m-5 shadow'>
       <div class='card-header text-center'>
-        <h3>Credit Card Payment</h3>
+        <h4>Credit Card Payment</h4>
       </div>
 
       <div class='card-body'>
@@ -12,26 +12,33 @@
           <div class='col-md-12 mb-2'>
             <label class='font-weight-bold'>Credit Card Number<span class="text-danger" *ngIf="hasRequiredField(creditCardForm.get('card_no'))">*</span></label>
             <input  formControlName='card_no' class='form-control' type='text' />
+            <div *ngIf="creditCardForm.get('card_no').touched && creditCardForm.get('card_no').invalid" class='text-danger'><small>card number is required.</small></div>
           </div>
 
           <div class='col-md-12 mb-2'>
             <label class='font-weight-bold'>Card Holder<span class="text-danger" *ngIf="hasRequiredField(creditCardForm.get('card_holder'))">*</span></label>
             <input formControlName='card_holder' class='form-control' type='text' />
+            <div *ngIf="creditCardForm.get('card_holder').touched && creditCardForm.get('card_holder').invalid" class='text-danger'><small>card holder is required.</small></div>
+
           </div>
 
           <div class='col-md-12 mb-2'>
             <label class='font-weight-bold'>Expiration Date<span class="text-danger" *ngIf="hasRequiredField(creditCardForm.get('expiry_date'))">*</span></label>
             <input formControlName='expiry_date' class='form-control' min='{{today}}' type='date' />
+            <div *ngIf="creditCardForm.get('expiry_date').touched && creditCardForm.get('expiry_date').invalid" class='text-danger'><small>expiration date is required.</small></div>
           </div>
 
           <div class='col-md-12 mb-2'>
             <label class='font-weight-bold'>Security Code (CVV)<span class="text-danger" *ngIf="hasRequiredField(creditCardForm.get('security_code'))">*</span></label>
             <input formControlName='security_code'  class='form-control' type='text' />
+            <div *ngIf="creditCardForm.get('security_code').touched && creditCardForm.get('security_code').invalid" class='text-danger'><small>3-digit code.</small></div>
           </div>
 
           <div class='col-md-12'>
             <label class='font-weight-bold'>Amount<span class="text-danger" *ngIf="hasRequiredField(creditCardForm.get('amount'))">*</span></label>
             <input formControlName='amount' class='form-control' type='number'/>
+            <div *ngIf="creditCardForm.get('amount').touched && creditCardForm.get('amount').invalid" class='text-danger'><small>amount is required.</small></div>
+
           </div>
         </div>
       </div>
@@ -39,7 +46,7 @@
       <div class='card-footer'>
         <div class='btn-group float-right'>
           <button class='btn btn-secondary' type='button' (click)="goBack()">
-            Back
+            &#x2190; Back
           </button>
           <button [disabled]="creditCardForm.invalid || loaders?.processing" [ngClass]="setValidationClass(creditCardForm.valid)" type='submit'>
             {{btnText.pay}}

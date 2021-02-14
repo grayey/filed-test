@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PaymentService } from '../../services/payment/payment.service';
+import { NotificationService } from '../../services/notifications.service';
 import { CreditCard } from '../../dtos/card.dto';
-import * as CreditCardActions from "../state-manager/actions/card.actions";
+import * as CreditCardActions from '../state-manager/actions/card.actions';
 
 import { Store } from '@ngrx/store';
 import { AppState } from '../app.state';
@@ -22,7 +23,7 @@ export class CreditCardComponent implements OnInit {
       card_no: ['', Validators.compose([Validators.required])],
       card_holder: ['', Validators.compose([Validators.required])],
       expiry_date: ['', Validators.compose([Validators.required])],
-      security_code: ['', Validators.compose([Validators.minLength(3),Validators.maxLength(3)])],
+      security_code: ['', Validators.compose([Validators.minLength(3),Validators.maxLength(3), Validators.pattern(/^[0-9]\d*$/)])],
       amount: ['', Validators.compose([Validators.required])],
     };
   };
@@ -40,7 +41,8 @@ export class CreditCardComponent implements OnInit {
   public today = new Date().toISOString().split('T')[0];
 
 
-  constructor(private router:Router, private fb:FormBuilder, private paymentService:PaymentService, private store:Store<AppState>) {
+  constructor(private router:Router, private fb:FormBuilder, private paymentService:PaymentService,
+     private store:Store<AppState>, private notification:NotificationService) {
     this.creditCardForm = this.fb.group(CreditCardComponent.creditCardForm())
    }
 
@@ -61,29 +63,29 @@ export class CreditCardComponent implements OnInit {
    */
   public makePayment = async ():Promise<any> => {
     const paymentData : CreditCard = this.creditCardForm.value;
-    const { amount } = paymentData;
-    if(!amount){
-      return alert('Please provide a valid amount');
-    }
+    const { amount, expiry_date } = paymentData;
+    if(!amount) return this.notification.error('Please provide a valid amount!');
+    if(new Date(this.today) > new Date(expiry_date)) return this.notification.error('Card already expired!');
+
     this.loaders.processing = true;
     this.btnText.pay = 'Processing..';
     return await this.paymentService.makePayment(paymentData).subscribe(
       (paymentResponse) => {
-        // this.notification.error('An error ocuured', error);
+        this.notification.success(paymentResponse.msg || 'Payment successful.');
         this.loaders.processing = false;
         this.btnText.pay = 'Pay';
         this.dispatchPayment(paymentData);
         this.creditCardForm.reset();
-
-        console.log('Liste response', paymentResponse);
       },
       (error) => {
-        // this.notification.error('An error ocuured', error);
         this.loaders.processing = false;
         this.btnText.pay = 'Pay';
+        console.log('An Error Occurred', error);
+        error = null; // for demo purposes
+        this.notification.error('An error occurred but data was dispatched.', error);
+        // for demo purposes
         this.dispatchPayment(paymentData);
         this.creditCardForm.reset();
-        console.log('An Error Occurred', error);
       }
     );
   }

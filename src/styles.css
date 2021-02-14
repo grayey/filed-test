@@ -53,6 +53,16 @@ p {
   opacity: 0.8;
 }
 
+.custom-p{
+  background-color:rgb(25,118,210) !important;
+  border-color:rgb(25,118,210) !important;
+  height: 2em;
+
+}
+
+.jumbotron  p{
+  padding-top:0.5em;
+}
 /**
 Home Page
 **/

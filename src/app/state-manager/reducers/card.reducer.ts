@@ -8,7 +8,7 @@ const initialState: CreditCard  = {
   card_holder:"YYYY",
   expiry_date:new Date().toISOString(),
   security_code:"",
-  amount:0
+  amount:5
 }
 
 export function cardReducer(state: CreditCard[] = [initialState], action:CreditCardActions.Actions){

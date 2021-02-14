@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
+import { NotificationModule } from './notifications/notifications.module';
 
 import { StoreModule } from '@ngrx/store';
 import { cardReducer } from './state-manager/reducers/card.reducer';
@@ -30,6 +31,7 @@ import { APP_ROUTES } from './app.routing';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    NotificationModule,
     StoreModule.forRoot({
       creditCard:cardReducer
     }),

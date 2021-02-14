@@ -3,6 +3,7 @@ import { Observable } from 'rxjs/Observable';
 import { Store } from '@ngrx/store';
 import { CreditCard } from '../dtos/card.dto';
 import * as CreditCardActions from "./state-manager/actions/card.actions";
+import { NotificationService } from '../services/notifications.service';
 
 import { AppState } from './app.state';
 
@@ -18,7 +19,7 @@ export class AppComponent {
 
   title = 'FiledPay';
 
-  constructor(private store:Store<AppState>){
+  constructor(private store:Store<AppState>, private notification:NotificationService){
     this.cardData = this.store.select('creditCard');
     this.cardData.subscribe(
       (cards)=>{
@@ -42,6 +43,8 @@ export class AppComponent {
    */
   public deleteCard = (index):void => {
     this.store.dispatch(new CreditCardActions.RemoveCard(index))
+    this.notification.success('Payment successfully deleted!');
+
   }
 
 
