@@ -4,6 +4,9 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
+import { StoreModule } from '@ngrx/store';
+import { cardReducer } from './state-manager/reducers/card.reducer';
+
 import { UserService } from '../services/user/user.service';
 import { PaymentService } from '../services/payment/payment.service';
 import { ApiHandlerService } from '../services/api-handler.service';
@@ -27,6 +30,9 @@ import { APP_ROUTES } from './app.routing';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
+    StoreModule.forRoot({
+      creditCard:cardReducer
+    }),
     RouterModule.forRoot(APP_ROUTES)
   ],
   providers: [

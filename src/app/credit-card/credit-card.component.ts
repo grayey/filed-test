@@ -3,6 +3,10 @@ import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { PaymentService } from '../../services/payment/payment.service';
 import { CreditCard } from '../../dtos/card.dto';
+import * as CreditCardActions from "../state-manager/actions/card.actions";
+
+import { Store } from '@ngrx/store';
+import { AppState } from '../app.state';
 
 import { hasRequiredField, setValidationClass } from '../../utils/helpers';
 
@@ -26,6 +30,7 @@ export class CreditCardComponent implements OnInit {
   public hasRequiredField = hasRequiredField;
   public setValidationClass = setValidationClass;
   public creditCardForm: FormGroup;
+
   public loaders = {
     processing:false
   }
@@ -35,7 +40,7 @@ export class CreditCardComponent implements OnInit {
   public today = new Date().toISOString().split('T')[0];
 
 
-  constructor(private router:Router, private fb:FormBuilder, private paymentService:PaymentService) {
+  constructor(private router:Router, private fb:FormBuilder, private paymentService:PaymentService, private store:Store<AppState>) {
     this.creditCardForm = this.fb.group(CreditCardComponent.creditCardForm())
    }
 
@@ -67,6 +72,8 @@ export class CreditCardComponent implements OnInit {
         // this.notification.error('An error ocuured', error);
         this.loaders.processing = false;
         this.btnText.pay = 'Pay';
+        this.dispatchPayment(paymentData);
+        this.creditCardForm.reset();
 
         console.log('Liste response', paymentResponse);
       },
@@ -74,9 +81,22 @@ export class CreditCardComponent implements OnInit {
         // this.notification.error('An error ocuured', error);
         this.loaders.processing = false;
         this.btnText.pay = 'Pay';
+        this.dispatchPayment(paymentData);
+        this.creditCardForm.reset();
         console.log('An Error Occurred', error);
       }
     );
+  }
+
+
+  /**
+   *
+   * @param paymentData
+   * This method dispatches a new payment to the store
+   */
+  public dispatchPayment = (paymentData:CreditCard) =>{
+    this.store.dispatch(new CreditCardActions.AddCard(paymentData))
+
   }
 
 

@@ -15,24 +15,52 @@
 </div>
 
 <div class='row'>
-  <div class='col-md-4'>
+  <div class='col-md-5'>
    <div class='container'>
     <div class='jumbotron mt-5'>
-      <h4 class=''><u>Card Data</u></h4>
-      <p>Card Number: </p>
-      <p>Card Holder: </p>
-      <p>Expiration Date: </p>
-      <p>Secuirty Code: </p>
-      <p>Amount: </p>
+      <h4 class=''><u>Latest payment</u></h4>
+      <p>Card Number: {{lastCard?.card_no}}</p>
+      <p>Card Holder: {{lastCard?.card_holder}}</p>
+      <p>Expiration Date: {{lastCard?.expiry_date | date}}</p>
+      <p>Secuirty Code: {{lastCard?.security_code}}</p>
+      <p>Amount: {{lastCard?.amount | currency}}</p>
+
+      <div class='mt-4 border-top'>
+        <h6>List of payments</h6>
+        <table class="table table-sm table-striped table-hover">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Number</th>
+              <th>Holder</th>
+              <th>Expiry</th>
+              <th>CVV</th>
+              <th>Amount</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor='let card of cardData | async; let i = index'>
+              <td><b><small>{{i+1}}.</small></b></td>
+              <td><small>{{card?.card_no}}</small></td>
+              <td><small>{{card?.card_holder}}</small></td>
+              <td><code>{{card?.expiry_date | date}}</code></td>
+              <td><small>{{card?.security_code}}</small></td>
+              <td><small>{{card?.amount | currency}}</small></td>
+              <td><span (click)='deleteCard(i)' class="btn badge badge-danger">X</span></td>
+            </tr>
+          </tbody>
+
+        </table>
+
+      </div>
     </div>
    </div>
 
   </div>
 
-  <div class='col-md-8'>
-
+  <div class='col-md-7'>
     <router-outlet></router-outlet>
-
   </div>
 
 </div>
